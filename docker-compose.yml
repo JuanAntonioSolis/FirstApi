@@ -1,0 +1,27 @@
+version: "3.3"
+
+services:
+  web:
+    container_name: springapiejemplo
+    image: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    container_name: springmariadb
+    image: mariadb:latest
+    environment:
+      MARIADB_USER: usuario
+      MARIADB_PASSWORD: usuario1234
+      MARIADB_ROOT_PASSWORD: toor
+      MARIADB_DATABASE: springapi
+    ports:
+      - "3309:3306"
+    volumes:
+      - ./mysql:/var/lib/mysqlpod
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u root --password=$$MYSQL_ROOT_PASSWORD
+      interval: 10s
+      retries: 5
