@@ -44,32 +44,29 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
           script: >-
-            set -e
+            set -e &&
+            APP_DIR=/home/ubuntu/spring/FirstApi &&
 
-            # Carpeta de la app en tu servidor
-            APP_DIR=/home/ubuntu/spring/FirstApi
+            echo "Copiar JAR descargado al servidor..." &&
+            cp -f ./artifacts/*.jar $APP_DIR/app.jar &&
 
-            echo "Copiar JAR descargado al servidor..."
-            # Borra JAR anterior y copia el nuevo
-            cp -f ./artifacts/*.jar $APP_DIR/app.jar
-
-            cd $APP_DIR
+            cd $APP_DIR &&
             
-            echo "Actualizar código en servidor..."
-            git pull origin main
+            echo "Actualizar código en servidor..." &&
+            git pull origin main &&
             
-            echo "Construir imagen Spring Boot..."
-            podman build -t springapiejemplo:1.0 .
+            echo "Construir imagen Spring Boot..." &&
+            podman build -t springapiejemplo:1.0 . &&
             
-            echo "Parar contenedor Spring si existe..."
-            podman rm -f springapp || true
+            echo "Parar contenedor Spring si existe..." &&
+            podman rm -f springapp || true &&
             
-            echo "Levantar contenedor MariaDB..."
-            podman stop mariadb_spring
-            podman start mariadb_spring
+            echo "Levantar contenedor MariaDB..." &&
+            podman stop mariadb_spring &&
+            podman start mariadb_spring &&
     
-            echo "Esperando a arrancar MariaDB..."
-            sleep 5
+            echo "Esperando a arrancar MariaDB..." &&
+            sleep 5 &&
             
-            echo "Levantar contenedor Spring Boot..."
+            echo "Levantar contenedor Spring Boot..." &&
             podman run -p 8080:8080 --network host  --name springapp -d -t springapiejemplo:1.0
