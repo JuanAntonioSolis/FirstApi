@@ -3,10 +3,9 @@ package com.jaroso.firstapi.controllers;
 import com.jaroso.firstapi.entities.Task;
 import com.jaroso.firstapi.services.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -40,6 +39,37 @@ public class TaskController {
 
 
         return ResponseEntity.ok(task.get());
+    }
+
+    @PostMapping("/tasks")
+    public ResponseEntity<Task> createTask(@RequestBody Task task) {
+       // return ResponseEntity.ok(taskService.saveTask(task));
+        return ResponseEntity.status(HttpStatus.CREATED).body(taskService.saveTask(task));
+
+    }
+
+    @PutMapping("/tasks")
+    public ResponseEntity<Task> updateTask(@RequestBody Task task) {
+        return ResponseEntity.ok(taskService.saveTask(task));
+    }
+
+    @DeleteMapping("/tasks/{id}")
+    public ResponseEntity<Task> deleteTaskById(@PathVariable Integer id) {
+
+        Optional<Task> task = taskService.findById(id);
+
+        if (task.isPresent()){
+            taskService.deleteTask(id);
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/tasks")
+    public ResponseEntity<Void> deleteAll(){
+        taskService.deleteAll();
+        return ResponseEntity.noContent().build();
     }
 
 }
