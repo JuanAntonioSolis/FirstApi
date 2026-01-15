@@ -30,6 +30,15 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    public List<Task> findAllByOrderByTitle(String order) {
+        if (order.equals("asc")) {
+            return taskRepository.findAllByOrderByTitleAsc();
+        } else  {
+            return taskRepository.findAllByOrderByTitleDesc();
+        }
+    }
+
+    @Override
     public Task saveTask(Task task) {
         return taskRepository.save(task);
     }

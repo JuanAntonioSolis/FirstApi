@@ -11,6 +11,7 @@ public interface TaskService {
     List<Task> findAll();
     Optional<Task> findById(Integer id);
     Optional<Task> findByTitle(String title);
+    List<Task> findAllByOrderByTitle(String order);
 
     //CREATE / UPDATE
     Task saveTask(Task task);
