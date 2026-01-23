@@ -1,5 +1,8 @@
 package com.jaroso.firstapi.controllers;
 
+import com.jaroso.firstapi.dtos.TaskCreateDto;
+import com.jaroso.firstapi.dtos.TaskDto;
+import com.jaroso.firstapi.dtos.TaskUpdateDto;
 import com.jaroso.firstapi.entities.Task;
 import com.jaroso.firstapi.services.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,18 +20,18 @@ public class TaskController {
     private TaskService taskService;
 
     @GetMapping("/tasks")
-    public ResponseEntity<List<Task>> getAllTasks() {
+    public ResponseEntity<List<TaskDto>> getAllTasks() {
         return ResponseEntity.ok(taskService.findAll());
     }
 
     @GetMapping("/tasks/order/{order}")
-    public ResponseEntity<List<Task>> getAllTasksOrder(@PathVariable String order) {
+    public ResponseEntity<List<TaskDto>> getAllTasksOrder(@PathVariable String order) {
         return ResponseEntity.ok(taskService.findAllByOrderByTitle(order));
     }
 
     @GetMapping("/tasks/{id}")
-    public ResponseEntity<Task> getTaskById(@PathVariable Integer id) {
-        Optional<Task> task = taskService.findById(id);
+    public ResponseEntity<TaskDto> getTaskById(@PathVariable Integer id) {
+        Optional<TaskDto> task = taskService.findById(id);
 
         if (task.isEmpty())
             return ResponseEntity.notFound().build();
@@ -37,8 +40,8 @@ public class TaskController {
     }
 
     @GetMapping("/tasks/title/{title}")
-    public ResponseEntity<Task> getTaskByTitle(@PathVariable String title) {
-        Optional<Task> task = taskService.findByTitle(title);
+    public ResponseEntity<TaskDto> getTaskByTitle(@PathVariable String title) {
+        Optional<TaskDto> task = taskService.findByTitle(title);
         if (task.isEmpty())
             return ResponseEntity.notFound().build();
 
@@ -47,21 +50,21 @@ public class TaskController {
     }
 
     @PostMapping("/tasks")
-    public ResponseEntity<Task> createTask(@RequestBody Task task) {
+    public ResponseEntity<TaskDto> createTask(@RequestBody TaskCreateDto task) {
        // return ResponseEntity.ok(taskService.saveTask(task));
         return ResponseEntity.status(HttpStatus.CREATED).body(taskService.saveTask(task));
 
     }
 
     @PutMapping("/tasks")
-    public ResponseEntity<Task> updateTask(@RequestBody Task task) {
-        return ResponseEntity.ok(taskService.saveTask(task));
+    public ResponseEntity<TaskDto> updateTask(@RequestBody TaskUpdateDto task) {
+        return ResponseEntity.ok(taskService.updateTask(task));
     }
 
     @DeleteMapping("/tasks/{id}")
-    public ResponseEntity<Task> deleteTaskById(@PathVariable Integer id) {
+    public ResponseEntity<TaskDto> deleteTaskById(@PathVariable Integer id) {
 
-        Optional<Task> task = taskService.findById(id);
+        Optional<TaskDto> task = taskService.findById(id);
 
         if (task.isPresent()){
             taskService.deleteTask(id);
@@ -77,4 +80,8 @@ public class TaskController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/tasks/search/{texto}")
+    public ResponseEntity<List<TaskDto>> buscarPorTitulo(@PathVariable String texto) {
+        return ResponseEntity.ok(taskService.buscarPorTitulo(texto));
+    }
 }
