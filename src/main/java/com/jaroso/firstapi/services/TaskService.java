@@ -1,5 +1,8 @@
 package com.jaroso.firstapi.services;
 
+import com.jaroso.firstapi.dtos.TaskCreateDto;
+import com.jaroso.firstapi.dtos.TaskDto;
+import com.jaroso.firstapi.dtos.TaskUpdateDto;
 import com.jaroso.firstapi.entities.Task;
 
 import java.util.List;
@@ -8,13 +11,15 @@ import java.util.Optional;
 public interface TaskService {
 
     //RETRIEVE
-    List<Task> findAll();
-    Optional<Task> findById(Integer id);
-    Optional<Task> findByTitle(String title);
-    List<Task> findAllByOrderByTitle(String order);
+    List<TaskDto> findAll();
+    Optional<TaskDto> findById(Integer id);
+    Optional<TaskDto> findByTitle(String title);
+    List<TaskDto> findAllByOrderByTitle(String order);
+    List<TaskDto> buscarPorTitulo(String titulo);
 
     //CREATE / UPDATE
-    Task saveTask(Task task);
+    TaskDto saveTask(TaskCreateDto taskDto);
+    TaskDto updateTask(TaskUpdateDto taskDto);
 
     //DELETE
     void deleteTask(Integer id);

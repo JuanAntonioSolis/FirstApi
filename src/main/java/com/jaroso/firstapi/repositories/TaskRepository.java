@@ -2,6 +2,7 @@ package com.jaroso.firstapi.repositories;
 
 import com.jaroso.firstapi.entities.Task;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -13,5 +14,8 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
     Optional<Task> findByTitle(String title);
     List<Task> findAllByOrderByTitleAsc();
     List<Task> findAllByOrderByTitleDesc();
+
+    @Query("Select t from tasks t where t.title LIKE %:texto%")
+    List<Task> buscarPorTitulo(String titulo);
 
 }
