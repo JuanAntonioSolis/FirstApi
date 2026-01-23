@@ -53,6 +53,10 @@ public class User implements UserDetails {
         this.tasks.remove(task);
     }
 
+    @Override
+    public String getUsername() {
+        return this.username;
+    }
 
     @Override
     public boolean isAccountNonExpired() {
