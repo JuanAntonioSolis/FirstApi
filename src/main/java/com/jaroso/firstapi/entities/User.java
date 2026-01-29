@@ -37,6 +37,14 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private List<UserAuthority> authorities = new ArrayList<>();
 
+    public User(Long id, String username, String password, String email, List<UserAuthority> authorities) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.authorities = authorities;
+    }
+
     /**
      * Metodo para añadir tarea al usuario
      * @param task
